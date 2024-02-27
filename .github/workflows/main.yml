@@ -25,6 +25,8 @@ jobs:
            ssh -t -t -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
            ssh -o ServerAliveInterval=300  ${USER_NAME}@{HOSTNAME}
               # Now we have got the access of EC2 and we will start the deploy .
-              cp .github/workflows/scripts/startserver.sh /home/ec2-user/github/ &&
+              scp .github/workflows/scripts/startserver.sh /home/ec2-user/github/
+              echo ${USER_NAME} $HOSTNAME
+              #scp .github/workflows/scripts/startserver.sh /home/ec2-user/github/ &&
               cd /home/ec2-user/github/startserver.sh
               
