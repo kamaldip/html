@@ -9,18 +9,32 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     
-    steps:
-      - uses: actions/checkout@v1 
-      - name: Build & Deploy
-        env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-            HOSTNAME: ${{secrets.SSH_HOST}}
-            USER_NAME: ${{secrets.USER_NAME}}
-            AWS_EC2_METADATA_DISABLED: "true"
-      
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} 
+    # steps:
+    #   - uses: actions/checkout@v1 
+    #   - name: Build & Deploy
+    #     env:
+    #         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    #         HOSTNAME: ${{secrets.SSH_HOST}}
+    #         USER_NAME: ${{secrets.USER_NAME}}
+    #         AWS_EC2_METADATA_DISABLED: "true"
+    steps:       
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.USER_NAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /home/ec2-user/github/
+          git pull origin main
+          git status
+          sudo yum -y install httpd
+          sudo service httpd startl 
+                
+        #run: |
+         # echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          #ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} 
                         
                                     
           #ssh -t -t -o ServerAliveInterval=300 -i private_key ${USER_NAME}@${HOSTNAME}
