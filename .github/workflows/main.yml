@@ -26,9 +26,14 @@ jobs:
            echo ${USER_NAME} 
            ssh -o ServerAliveInterval=300  ${USER_NAME}@{HOSTNAME}
            echo $HOSTNAME
+           cd /home/ec2-user/github/ &&
+           git checkout main &&
+           git fetch --all &&
+           git reset --hard origin/main &&
+           git pull origin main &&
               # Now we have got the access of EC2 and we will start the deploy .
               #scp .github/workflows/scripts/startserver.sh ${USER_NAME}@${HOSTNAME}:/home/ec2-user/github/
               
-              cp .github/workflows/scripts/startserver.sh /home/ec2-user/github/ 
-              cd /home/ec2-user/github/startserver.sh
+              #cp .github/workflows/scripts/startserver.sh /home/ec2-user/github/ 
+              #cd /home/ec2-user/github/startserver.sh
               
