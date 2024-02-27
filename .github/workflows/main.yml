@@ -3,6 +3,8 @@ name: Deploy
 on:
   push:
     branches: [ main ]
+env:
+  AWS_EC2_METADATA_DISABLED: "true"
 
 jobs:
   Deploy:
