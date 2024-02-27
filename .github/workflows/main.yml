@@ -1,35 +1,33 @@
+name: Deploy
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+
 jobs:
-  build:
-    name: 🎉 Deploy
-    runs-on: ubuntu-latest
+  Deploy:
+    name: Deploy to EC2
+    runs-on: linux-latest
+    
     steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.SSH_HOST}}
+            USER_NAME: ${{secrets.USER_NAME}}
+      
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-      - name: 📂 Set working directory
-        run: cd /var/www/html/
-
-      - name: 🛠 Install dependencies
-        run: npm install
-        working-directory: /var/www/html/
-
-      - name: 🛠 Install Vite globally
-        run: npm install -g vite
-        working-directory: /var/www/html/
-
-      - name: 🛠 Build
-        run: npm run build
-        working-directory: /var/www/html/
-      - name: 📂 rsync deployments
-        uses: burnett01/rsync-deployments@5.1
-        with:
-          switches: -avzr --delete
-          path: ./*
-          remote_path: /var/www/html/
-          remote_host: <your_ec2_ip_address>
-          remote_user: ec2-user
-          remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"  
+              # Now we have got the access of EC2 and we will start the deploy .
+              cd /home/ubuntu/<PROJECT_DIRECTORY> &&
+              git checkout dev &&
+              git fetch --all &&
+              git reset --hard origin/dev &&
+              git pull origin dev &&
+              sudo npm i &&
+              sudo npm run build &&
+              sudo pm2 stop ./dist/index.js &&
+              sudo pm2 start ./dist/index.js
