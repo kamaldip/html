@@ -28,8 +28,11 @@ jobs:
         port: 22
         script: |
           cd /home/ec2-user/github/
-           git pull origin main
-           git status
+          git checkout main &&
+          git fetch --all &&
+          git reset --hard origin/main &&
+          git pull origin/main
+          git status
           sudo yum -y install httpd
           sudo service httpd startl 
                 
