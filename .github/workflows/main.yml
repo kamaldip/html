@@ -19,7 +19,8 @@ jobs:
     #         AWS_EC2_METADATA_DISABLED: "true"
     steps:       
     - name: Deploy using ssh
-      uses: appleboy/ssh-action@master
+      uses: actions/checkout@v2
+      #uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.USER_NAME }}
