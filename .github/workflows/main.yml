@@ -1,0 +1,35 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 📂 Set working directory
+        run: cd /var/www/html/
+
+      - name: 🛠 Install dependencies
+        run: npm install
+        working-directory: /var/www/html/
+
+      - name: 🛠 Install Vite globally
+        run: npm install -g vite
+        working-directory: /var/www/html/
+
+      - name: 🛠 Build
+        run: npm run build
+        working-directory: /var/www/html/
+      - name: 📂 rsync deployments
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./*
+          remote_path: /var/www/html/
+          remote_host: <your_ec2_ip_address>
+          remote_user: ec2-user
+          remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"  
