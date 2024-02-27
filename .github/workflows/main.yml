@@ -20,16 +20,25 @@ jobs:
       
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+
+              # Now we have got the access of EC2 and we will start the deploy .
+              cd /home/ec2-user/github/ &&
+              git checkout main &&
+              git fetch --all &&
+              git reset --hard origin/main &&
+              git pull origin main &&
+              '              
           #ssh -t -t -o ServerAliveInterval=300 -i private_key ${USER_NAME}@${HOSTNAME}
-           ssh -t -t -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-           echo ${USER_NAME} 
-           ssh -o ServerAliveInterval=300  ${USER_NAME}@{HOSTNAME}
-           echo $HOSTNAME
-           cd /home/ec2-user/github/ &&
-           git checkout main &&
-           git fetch --all &&
-           git reset --hard origin/main &&
-           git pull origin main && '
+           #ssh -t -t -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+           #echo ${USER_NAME} 
+           #ssh -o ServerAliveInterval=300  ${USER_NAME}@{HOSTNAME}
+           #echo $HOSTNAME
+           #cd /home/ec2-user/github/ &&
+           #git checkout main &&
+           #git fetch --all &&
+           #git reset --hard origin/main &&
+           #git pull origin main && '
               # Now we have got the access of EC2 and we will start the deploy .
               #scp .github/workflows/scripts/startserver.sh ${USER_NAME}@${HOSTNAME}:/home/ec2-user/github/
               
