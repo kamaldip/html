@@ -26,7 +26,7 @@ jobs:
         username: ${{ secrets.USER_NAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        script: |
+        run: |
           # git clone main &&
           # git fetch --all &&
           # git reset --hard origin/main &&
