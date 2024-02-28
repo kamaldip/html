@@ -27,8 +27,6 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /home/runner/work/html/html/
-          mv * /var/www/html/
           # git clone main &&
           # git fetch --all &&
           # git reset --hard origin/main &&
@@ -37,6 +35,8 @@ jobs:
           sudo yum -y install httpd
           sudo service httpd start
           sudo systmctl enable httpd
+          cd /home/runner/work/html/html/
+          mv * /var/www/html/
           # echo '<!doctype html>' >> /var/www/html/index.html
           # echo '<html>' >> /var/www/html/index.html
           # echo '<head>' >> /var/www/html/index.html
