@@ -27,7 +27,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /home/
+          cd /home/runner/work/html/html/
           mv * /var/www/html/
           # git clone main &&
           # git fetch --all &&
